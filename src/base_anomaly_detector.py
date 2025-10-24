@@ -53,7 +53,7 @@ class BaseAnomalyDetector(ABC):
         
         self.test_metric = None
 
-        self.plotting_backend = 'plotly'
+        self.plotting_backend = 'matplotlib'  # 'matplotlib' or 'plotly'
 
         self.train_val_ratio = 0.8  # para particion si no se especifica timestamps en el config (ver _initialize_data)
         # for partitioning if timestamps are not specified in the config (see _initialize_data)
@@ -621,7 +621,7 @@ class BaseAnomalyDetector(ABC):
             raise ValueError(f'Thresholding method not implemented: {thresholding}')
 
         if plot:
-            if self.plotting_backend == 'mattplotlib':
+            if self.plotting_backend == 'matplotlib':
                 fig, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=4, figsize=(12, 7), sharex=True)
                 self.get_test_interval_data().plot(label='test_data', ax=ax1)
                 ax1.legend(['test_data'])
