@@ -96,7 +96,7 @@ conda activate easy_ts_ad
 ```
 
 > Note
-If using PyTorch models from DARTS, it may ne better to install torch first (CPU version, or GPU version if available)  
+If using PyTorch models from DARTS, it may be better to install torch first (CPU version, or GPU version if available)  
 See PyTorch compatibility and installation instructions here: https://pytorch.org/get-started/locally/  
 Check CUDA / NVIDIA driver compatibility here: https://docs.nvidia.com/deeplearning/cudnn/latest/reference/support-matrix.html  
 Please refer to: https://github.com/unit8co/darts/blob/master/INSTALL.md  for detailed instructions
