@@ -1,0 +1,68 @@
+
+# DARTS ---------------------------------------------------------------------------
+darts:
+  # Temporal Convolutions Networks
+  forecasting_model:
+      class: TCNModel
+      parameters:
+        input_chunk_length: 168  # 7*24 (one week of hourly data)
+        output_chunk_length: 1
+        n_epochs: 10
+        dropout: 0.1
+        batch_size: 32
+        optimizer_kwargs: {"lr": 0.001}
+        pl_trainer_kwargs: {accelerator: gpu}  # cpu or gpu (if available)
+        kernel_size: 21
+        num_filters: 8
+        #likelihood: QuantileRegression()
+        model_name: "TCN_test"
+        save_checkpoints: True
+        log_tensorboard: True
+        force_reset: True
+        random_state: 42
+        add_encoders: {
+          cyclic: {past: [hour, dayofweek], future: [hour, dayofweek] },
+        }  
+
+  anomaly_scorer:  
+    class: WassersteinScorer
+    parameters:
+      window: 24
+      component_wise: False  
+      window_agg: True
+
+  anomaly_detector:
+    class: QuantileDetector
+    parameters:
+      high_quantile: 0.95
+
+  anomaly_model:
+    class: ForecastingAnomalyModel
+    fit_parameters: #https://unit8co.github.io/darts/generated_api/darts.ad.anomaly_model.forecasting_am.html#darts.ad.anomaly_model.forecasting_am.ForecastingAnomalyModel.fit
+      start: 0  
+      allow_model_training: False 
+      verbose: True
+# DARTS ---------------------------------------------------------------------------
+
+
+## GENERAL ------------------------------------------------------------------------
+timestamps:
+  train:
+    start: "2021-01-01 00:00:00"
+    end: "2021-04-30 23:59:59"
+    freq: "H"
+  val:
+    start: "2021-05-01 00:00:00"
+    end: "2021-08-31 23:59:59"
+    freq: "H"
+  test:
+    start: "2021-09-01 00:00:00"
+    end: "2021-11-30 23:59:59"  
+    freq: "H"
+
+logging:
+  level: INFO
+  file_path: logs/anomaly_detection.log  
+# GENERAL ------------------------------------------------------------------------
+
+

@@ -1,93 +1,124 @@
-# easy_time_series_anomaly_detection
+# Easy Time Series Anomaly Detection
+# (A framework to use multiple time series libraries)
 
 
+<figure>
+    <img src="./resources/energy_ts.png" alt="ts" width="770">
+</figure>
 
-## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+This project simplifies the exploration and use of several anomaly detection libraries in a common framework.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Time series libraries use, in general, different schemes for data manipulation and processing. The implemented framework overcomes  this difficulty by defining a simple common interface and hiding the differences. This enables the user to integrate complementary algorithms from different libraries without writing specific code.  
+Algorithms, parameters and time periods are specified via configuration files which adds to the flexibility of the procedure and also allows for batch processing.    
 
-## Add your files
+## Framework
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+The framework defines a simple common interface for all the libraries as shown in the following class diagram of Figure 1.
 
+<figure>
+    <img src="./resources/class_diagram_simple.png" alt="Simplified class diagram">
+        <figcaption>Figure 1. Simplified class diagram of the framework. Libraries are integrated to the framework by implementing the funcionallity defined in the BaseAnomalyDetector class.</figcaption>
+</figure>
+
+The scheme is flexible and new libraries can be added by implementing the functionalities defined in the BaseAnomalyDetector class.
+
+--------
+
+### Currently integrated libraries 
+
+* ADTK: https://adtk.readthedocs.io/en/stable/  
+* DARTS https://unit8co.github.io/darts/  
+* RUPTURES http://dev.ipol.im/~truong/ruptures-docs/build/html/index.html , https://centre-borelli.github.io/ruptures-docs/
+
+-------
+
+### Configuration files
+
+Configuration files allow to specify the desired algorithms, parameters and time periods.
+
+The following is an example configuration for the __PersistAD__ anomaly detector from the ADTK library (https://adtk.readthedocs.io/en/stable/notebooks/demo.html#PersistAD) and the periods of time to apply the algorithm.
+
+```yaml
+# ADTK -----------------------------------------
+adtk_detector:
+  class: PersistAD  
+  parameters:
+    window: 196  
+    c: 2
+    side: negative
+# ADTK -----------------------------------------
+
+# GENERAL --------------------------------------
+timestamps:
+  train:
+    start: "2016-07-01 00:00:00"
+    end: "2017-12-31 23:59:59"
+    freq: "H"
+  val:
+    start: "2018-01-01 00:00:00"
+    end: "2018-06-30 23:59:59"
+    freq: "H"
+  test:
+    start: "2018-07-01 00:00:00"
+    end: "2019-12-31 23:59:59"  
+    freq: "H"
+
+logging:
+  level: INFO
+  file_path: logs/anomaly_detection.log  
+# GENERAL --------------------------------------
 ```
-cd existing_repo
-git remote add origin https://gitlab.fing.edu.uy/proyecto-fjr-ute-2024/easy_time_series_anomaly_detection.git
-git branch -M main
-git push -uf origin main
-```
 
-## Integrate with your tools
+------------
 
-- [ ] [Set up project integrations](https://gitlab.fing.edu.uy/proyecto-fjr-ute-2024/easy_time_series_anomaly_detection/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+* Clone the repository
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+``` bash
+# Change to a convenient directory
+cd <convenient_directory>
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+# Clone or download the repository
+git clone <repository>
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+cd easy_time_series_anomaly_detection
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+* Running the classes and example notebooks requires installing the required libraries in a virtual environment. Create and activate a virtual environment as shown below:
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+``` bash
+conda env create -n easy_ts_ad -f environment.yml
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+conda activate easy_ts_ad
+```
 
-## License
-For open source projects, say how it is licensed.
+> Note
+If using PyTorch models from DARTS, it may ne better to install torch first (CPU version, or GPU version if available)  
+See PyTorch compatibility and installation instructions here: https://pytorch.org/get-started/locally/  
+Check CUDA / NVIDIA driver compatibility here: https://docs.nvidia.com/deeplearning/cudnn/latest/reference/support-matrix.html  
+Please refer to: https://github.com/unit8co/darts/blob/master/INSTALL.md  for detailed instructions
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+## Example notebooks
+
+* [DEMO: Use of the framework](./notebooks/DEMO_use_of_the_framework.ipynb)
+* [DEMO: Anomaly detection wih DARTS forecasters](./notebooks/DEMO_example_ad_with_darts_forecasters.ipynb)
+
+
+## How to cite
+
+If you find this framework useful please cite:
+
+```bibtex
+PLACEHOLDER 
+@misc{easy_time_series_anomaly_detection_2024,
+    title = {{Easy Time Series Anomaly Detection}},
+    author = {AUTHOR_NAME},
+    year = {2025},
+    howpublished = {\url{PLACEHOLDER}},
+    note = {Accessed: YYYY-MM-DD}
+}
+```

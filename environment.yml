@@ -1,0 +1,15 @@
+name: easy_ts_ad
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - ipykernel
+  - pip:
+      - adtk==0.6.2
+      - ruptures==1.1.10
+      - darts==0.38.0
+      - ipympl
+      - plotly
+      - nbformat>=5.10
+prefix: ~/anaconda3/envs/easy_ts_ad

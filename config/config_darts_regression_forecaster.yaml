@@ -1,0 +1,60 @@
+# ARCHIVO DE CONFIGURACION
+
+# DARTS ---------------------------------------------------------------------------
+darts:
+  forecasting_model:
+    class: SKLearnModel #named RegressionModel in previous versions of Darts
+    parameters:
+      lags: 168  # 7*24 (one week of hourly data)
+      lags_future_covariates: !!python/tuple [168, 0]  # [7*24, 0] #in yaml it is necessary to use !!python/tuple for it to take the list as a tuple
+      lags_past_covariates: 168  # 7*24 (one week of hourly data)
+      #output_chunk_shift: 0
+      output_chunk_length: 1
+      # optional encoders. see: https://unit8co.github.io/darts/generated_api/darts.dataprocessing.encoders.encoders.html#sequentialencoder
+      add_encoders: {
+        cyclic: {past: [hour, dayofweek], future: [hour, dayofweek] },
+      }
+
+  anomaly_scorer:  
+    class: WassersteinScorer
+    parameters:
+      window: 24
+      component_wise: False  
+      window_agg: True
+
+  anomaly_detector:
+    class: QuantileDetector
+    parameters:
+      high_quantile: 0.95
+
+  anomaly_model:
+    class: ForecastingAnomalyModel
+    fit_parameters: #https://unit8co.github.io/darts/generated_api/darts.ad.anomaly_model.forecasting_am.html#darts.ad.anomaly_model.forecasting_am.ForecastingAnomalyModel.fit
+      start: 0  
+      allow_model_training: False 
+      verbose: True
+# DARTS ---------------------------------------------------------------------------
+
+
+
+# GENERAL ------------------------------------------------------------------------
+timestamps:
+  train:
+    start: "2021-01-01 00:00:00"
+    end: "2021-04-30 23:59:59"
+    freq: "H"
+  val:
+    start: "2021-05-01 00:00:00"
+    end: "2021-08-31 23:59:59"
+    freq: "H"
+  test:
+    start: "2021-09-01 00:00:00"
+    end: "2021-11-30 23:59:59"  
+    freq: "H"
+
+logging:
+  level: INFO
+  file_path: logs/anomaly_detection.log  
+# GENERAL ------------------------------------------------------------------------
+
+
