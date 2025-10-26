@@ -1,11 +1,7 @@
 # Easy Time Series Anomaly Detection
 # (A framework to use multiple time series libraries)
 
-
-<figure>
-    <img src="./resources/energy_ts.png" alt="ts" width="770">
-</figure>
-
+![Energy Time Series](./resources/energy_ts.png)
 
 This project simplifies the exploration and use of several anomaly detection libraries in a common framework.
 
@@ -16,10 +12,9 @@ Algorithms, parameters and time periods are specified via configuration files wh
 
 The framework defines a simple common interface for all the libraries as shown in the following class diagram of Figure 1.
 
-<figure>
-    <img src="./resources/class_diagram_simple.png" alt="Simplified class diagram">
-        <figcaption>Figure 1. Simplified class diagram of the framework. Libraries are integrated to the framework by implementing the funcionallity defined in the BaseAnomalyDetector class.</figcaption>
-</figure>
+![Simplified class diagram](./resources/class_diagram_simple.png)
+
+**Figure 1.** Simplified class diagram of the framework. Libraries are integrated to the framework by implementing the funcionallity defined in the BaseAnomalyDetector class.
 
 The scheme is flexible and new libraries can be added by implementing the functionalities defined in the BaseAnomalyDetector class.
 
